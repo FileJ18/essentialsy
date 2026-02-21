@@ -1,0 +1,16 @@
+# NoTrapdoorInteract.sk
+# All trapdoors are disabled EXCEPT pale oak trapdoors
+
+on rightclick on block:
+    if event-block is set:
+        if "%type of event-block%" contains "trapdoor":
+            if "%type of event-block%" is not "pale oak trapdoor":
+                cancel event
+                # send "&cYou can't interact with trapdoors!" to player
+
+# Optional: Block placement of all trapdoors except pale oak
+on place:
+    if "%type of event-item%" contains "trapdoor":
+        if "%type of event-item%" is not "pale oak trapdoor":
+            cancel event
+            send "&cTrapdoors are disabled!" to player
