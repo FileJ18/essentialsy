@@ -1,0 +1,69 @@
+# Full gamemode commands with username / @a / @s support
+
+# /gmc → creative
+command /gmc [<text>]:
+    trigger:
+        if arg is set:
+            if arg = "@a":
+                execute console command "gamemode creative @a"
+                send "&aEveryone is now Creative!" to player
+            else if arg = "@s":
+                set gamemode of player to creative
+                send "&aYou are now Creative!" to player
+            else:
+                execute console command "gamemode creative %arg%"
+                send "&a%arg% is now Creative!" to player
+        else:
+            set gamemode of player to creative
+            send "&aYou are now Creative!" to player
+
+# /gms → survival
+command /gms [<text>]:
+    trigger:
+        if arg is set:
+            if arg = "@a":
+                execute console command "gamemode survival @a"
+                send "&aEveryone is now Survival!" to player
+            else if arg = "@s":
+                set gamemode of player to survival
+                send "&aYou are now Survival!" to player
+            else:
+                execute console command "gamemode survival %arg%"
+                send "&a%arg% is now Survival!" to player
+        else:
+            set gamemode of player to survival
+            send "&aYou are now Survival!" to player
+
+# /gmsp → spectator
+command /gmsp [<text>]:
+    trigger:
+        if arg is set:
+            if arg = "@a":
+                execute console command "gamemode spectator @a"
+                send "&aEveryone is now Spectator!" to player
+            else if arg = "@s":
+                set gamemode of player to spectator
+                send "&aYou are now Spectator!" to player
+            else:
+                execute console command "gamemode spectator %arg%"
+                send "&a%arg% is now Spectator!" to player
+        else:
+            set gamemode of player to spectator
+            send "&aYou are now Spectator!" to player
+
+# /gma → adventure
+command /gma [<text>]:
+    trigger:
+        if arg is set:
+            if arg = "@a":
+                execute console command "gamemode adventure @a"
+                send "&aEveryone is now Adventure!" to player
+            else if arg = "@s":
+                set gamemode of player to adventure
+                send "&aYou are now Adventure!" to player
+            else:
+                execute console command "gamemode adventure %arg%"
+                send "&a%arg% is now Adventure!" to player
+        else:
+            set gamemode of player to adventure
+            send "&aYou are now Adventure!" to player
