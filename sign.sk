@@ -1,0 +1,7 @@
+on rightclick:
+    if event-block is set:
+        set {_b} to event-block
+        if "%{_b}%" contains "sign":   # or use "if block data of {_b} contains sign" in newer Skript
+            cancel event
+
+            # IF YOU WANNA EDIT SIGNS DISABLE AND ENABLE BACK
