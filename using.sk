@@ -1,34 +1,30 @@
-# File: plugins/Skript/scripts/no-trapdoor.sks
-# Reload with: /sk reload no-trapdoor
+# Basic structure for "on right click on [block]" in Skript
+# Save as: plugins/Skript/scripts/my-event.sk
+# Reload: /sk reload my-event
 
-on right click on trapdoor:
-    # Only care about player interactions (not redstone, dispensers, etc.)
-    if event-block is set:
-        if player's tool is not air:  # optional: ignore if just punching/empty hand, but usually fine
-            stop  # ← remove this line if you want empty-hand clicks to be blocked too
-
-        set {_b} to event-block's block data
+# ─── EVENT START ───
+on right click on trapdoor:  # ← This triggers ONLY when right-clicking ANY trapdoor
+    # Inside the event: Your code goes here (indented with 4 spaces or 1 tab)
+    
+    # Get the clicked block (event-block = the trapdoor you clicked)
+    set {_block} to event-block  # Save it to a variable for easy use
+    
+    # Example 1: Simple check + message
+    send "&aYou clicked a trapdoor!" to player
+    
+    # Example 2: Check if it's Pale Oak (allowed)
+    if {_block} is pale oak trapdoor:
+        send "&ePale Oak: Allowed to open!" to player
+        stop  # ← Exit early - do nothing else
+    
+    # Example 3: For ALL OTHER trapdoors → Force close it
+    else:
+        # Get current block data (like facing, half, etc.)
+        set {_data} to block data of {_block}
         
-        # Check if it's already open (we only want to react when player tries to open it)
-        if "%{_b}%" contains "open=true":
-            stop  # already open → player is trying to close it → allow normal close
+        # Set the SAME trapdoor but with open=false (keeps facing/half)
+        set block at event-location to "%{_block}%" parsed as block with data "[open=false]"
         
-        # ───────────────────────────────
-        # If we reach here → player is trying to OPEN a closed trapdoor
-        # ───────────────────────────────
-        
-        # Allow ONLY pale oak trapdoor
-        if "%event-block%" is pale oak trapdoor:
-            stop  # normal behaviour - let it open
-        
-        # Otherwise → force close immediately + annoy/feedback
-        else:
-            # Force close (set open=false while keeping other properties)
-            set block at event-block to "%event-block%" with "[open=false]" parsed as block data
-            
-            # Optional: sound + particles + message so player knows it's blocked
-            play sound "block.iron_trapdoor.close" at player with volume 0.9 and pitch 0.8
-            spawn 8 of particle "smoke" at event-block with offset 0.3, 0.3, 0.3 with extra 0.02
-            
-            send action bar "&c✖ Normal trapdoors can't stay open!" to player
-            # or send "&8[Server] &7Only &fpale oak &7trapdoors are allowed to stay open." to player
+        # Feedback
+        play sound "block.iron_trapdoor.close" at player volume 1 pitch 0.8
+        send action bar "&cTrapdoor snapped shut!" to player
