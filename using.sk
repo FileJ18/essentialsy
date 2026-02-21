@@ -1,14 +1,34 @@
-# All trapdoors disabled EXCEPT pale oak
+# File: plugins/Skript/scripts/no-trapdoor.sks
+# Reload with: /sk reload no-trapdoor
 
-on rightclick:
-    if clicked block is set:
-        if type of clicked block contains "trapdoor":
-            if type of clicked block is not pale oak trapdoor:
-                cancel event
+on right click on trapdoor:
+    # Only care about player interactions (not redstone, dispensers, etc.)
+    if event-block is set:
+        if player's tool is not air:  # optional: ignore if just punching/empty hand, but usually fine
+            stop  # ← remove this line if you want empty-hand clicks to be blocked too
 
-on place:
-    if event-item is set:
-        if type of event-item contains "trapdoor":
-            if type of event-item is not pale oak trapdoor:
-                cancel event
-                send "&cTrapdoors are disabled!" to player
+        set {_b} to event-block's block data
+        
+        # Check if it's already open (we only want to react when player tries to open it)
+        if "%{_b}%" contains "open=true":
+            stop  # already open → player is trying to close it → allow normal close
+        
+        # ───────────────────────────────
+        # If we reach here → player is trying to OPEN a closed trapdoor
+        # ───────────────────────────────
+        
+        # Allow ONLY pale oak trapdoor
+        if "%event-block%" is pale oak trapdoor:
+            stop  # normal behaviour - let it open
+        
+        # Otherwise → force close immediately + annoy/feedback
+        else:
+            # Force close (set open=false while keeping other properties)
+            set block at event-block to "%event-block%" with "[open=false]" parsed as block data
+            
+            # Optional: sound + particles + message so player knows it's blocked
+            play sound "block.iron_trapdoor.close" at player with volume 0.9 and pitch 0.8
+            spawn 8 of particle "smoke" at event-block with offset 0.3, 0.3, 0.3 with extra 0.02
+            
+            send action bar "&c✖ Normal trapdoors can't stay open!" to player
+            # or send "&8[Server] &7Only &fpale oak &7trapdoors are allowed to stay open." to player
