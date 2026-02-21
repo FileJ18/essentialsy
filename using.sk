@@ -1,23 +1,15 @@
-# File: plugins/Skript/scripts/no-trapdoor.sk
-# Compatible with Skript 2.13.2 (MC 1.20.4-1.21.10)
-# Reload: /sk reload no-trapdoor
-# Effect: All trapdoors except pale_oak instantly "refuse" to open (allow closing)
+# NoTrapdoorInteract.sk
+# Makes trapdoors completely non-interactive:
+# - Right-click does NOTHING (doesn't open/close, stays as-is)
+# - No GUI or toggle happens, even when spamming clicks
 
-on right click on trapdoor:
-    set {_data} to block data of event-block
-    
-    # Allow pale oak trapdoors (normal behavior)
-    if {_data} contains "pale_oak_trapdoor":
-        stop
-    
-    # For non-pale: if already open → allow closing (normal toggle)
-    if {_data} contains "open=true":
-        stop
-    
-    # Here: non-pale + closed → prevent opening!
+on rightclick:
+    if event-block is set:
+        if "%type of event-block%" contains "trapdoor":
+            cancel event
+            # send "&cYou can't interact with trapdoors!" to player  # ← uncomment if you want feedback message, otherwise silent
+
+# Optional: Also block any weird placement/editing attempts (rare for trapdoors)
+on place of trapdoor:
     cancel event
-    
-    # Feedback: snap sound + particles + message
-    play sound "block.iron_trapdoor.close" at location of event-block with volume 0.8 and pitch 0.7
-    show 10 smoke particles at location of event-block offset by 0.4, 0.4, 0.4
-    send "&c✖ Trapdoor snaps shut! &7(Only pale oak allowed)" to player as action bar
+    send "&cTrapdoors are disabled!" to player
