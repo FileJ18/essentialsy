@@ -5,28 +5,26 @@ command /freeze [<player>]:
     permission: freeze.command
     trigger:
         if arg-1 is set:
-            if {frozen.%arg-1%} is false:
+            if {frozen.%arg-1%} is not true:
                 set {frozen.%arg-1%} to true
-                apply slowness 255 to arg-1 for 999999 seconds # effectively infinite
-                apply blindness 255 to arg-1 for 999999 seconds # effectively infinite
-                message "&7You have frozen &b%arg-1%&7."
-                message "&cYou have been frozen!" to arg-1
+                apply slowness 255 to arg-1 for 999999 seconds
+                apply blindness 255 to arg-1 for 999999 seconds
+                send "&7You have frozen &b%arg-1%&7."
+                send "&cYou have been frozen!" to arg-1
             else:
-                set {frozen.%arg-1%} to false
+                delete {frozen.%arg-1%}
                 remove slowness from arg-1
                 remove blindness from arg-1
-                message "&7You have unfrozen &b%arg-1%&7."
-                message "&aYou have been unfrozen!" to arg-1
+                send "&7You have unfrozen &b%arg-1%&7."
+                send "&aYou have been unfrozen!" to arg-1
         else:
-            message "&cUsage: /freeze <player>"
+            send "&cUsage: /freeze <player>"
 
 on chat:
     if {frozen.%player%} is true:
         cancel event
-        message "&cYou cannot chat while frozen!"
-        
-on move:
+        send "&cYou cannot chat while frozen!"
+
+on player move:
     if {frozen.%player%} is true:
         cancel event
-        # Teleporting to their location prevents movement entirely, including jumping and turning.
-        teleport the player to the player's location
