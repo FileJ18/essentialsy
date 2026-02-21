@@ -1,0 +1,3 @@
+command /essentialsy:
+    trigger:
+        send "&aEssentialsY version 0.2a Beta&7, EssentialsX remade for low performance computers / servers!"
