@@ -1,0 +1,4 @@
+command /announcement <text>:
+    permission: server.announce
+    trigger:
+        execute console command "tellraw @a {\"text\":\"[SERVER] %arg-1%\",\"color\":\"gold\",\"bold\":true}"
