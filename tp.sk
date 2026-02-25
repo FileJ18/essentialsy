@@ -1,0 +1,6 @@
+# hey this is a sample tp for turtleprison so change if you want 
+command /stafflounge:
+    permission: stafflounge.use
+    permission message: &cYou do not have permission to use this command.
+    trigger:
+        teleport player to location(11.51, -60, -14.73, world of player)
