@@ -1,0 +1,5 @@
+command /I:
+    permission: special.i
+    trigger:
+        give player 1 minecraft:command_block
+        give player 1 minecraft:barrier
